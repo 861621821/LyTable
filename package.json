@@ -1,0 +1,94 @@
+{
+	"name": "ly-table-plugin",
+	"displayName": "ly-table-plugin",
+	"description": "内部crud组件插件",
+	"version": "0.0.3",
+	"publisher": "xilan",
+	"icon": "logo.jpg",
+	"engines": {
+		"vscode": "^1.60.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./src/index.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "LyTable.createLyTable",
+				"title": "★ 生成ly-able代码"
+			},
+			{
+				"command": "LyTable.createLyTableFile",
+				"title": "★ 创建ly-table模板文件"
+			},
+			{
+				"command": "LyTable.createSlot",
+				"title": "★ 添加列插槽"
+			},
+			{
+				"command": "LyTable.showLyTableDoc",
+				"title": "★ 查看LyTable文档",
+				"icon": {
+					"light": "./src/images/doc.svg",
+					"dark": "./src/images/doc.svg"
+				}
+			}
+		],
+		"menus": {
+			"explorer/context": [
+				{
+          "when": "resourceScheme == file",
+          "command": "LyTable.createLyTableFile",
+          "group": "navigation"
+        }
+			],
+			"editor/context": [
+				{
+					"when": "editorFocus",
+					"command": "LyTable.createLyTable",
+					"group": "navigation"
+				}
+			],
+			"editor/title": [{
+				"command": "LyTable.showLyTableDoc",
+				"group": "navigation"
+			}]
+		 },
+		"snippets": [
+			{
+				"language": "javascript",
+				"path": "./src/snippets/javascript.json"
+		 	},
+			{
+				"language": "vue",
+				"path": "./src/snippets/vue.json"
+			}
+		],
+		"keybindings": [{
+				"command": "LyTable.createSlot",
+				"key": "ctrl+shift+6",
+				"mac": "cmd+shift+6",
+				"when": "editorTextFocus"
+			}]
+	},
+	"scripts": {
+		"lint": "eslint .",
+		"pretest": "npm run lint",
+		"test": "node ./test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.60.0",
+		"@types/glob": "^7.1.3",
+		"@types/mocha": "^8.2.2",
+		"@types/node": "14.x",
+		"eslint": "^7.27.0",
+		"glob": "^7.1.7",
+		"mocha": "^8.4.0",
+		"typescript": "^4.3.2",
+		"vscode-test": "^1.5.2"
+	}
+}

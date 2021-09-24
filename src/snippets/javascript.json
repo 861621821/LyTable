@@ -1,0 +1,208 @@
+{
+  "生成lyTable组件tableOpt属性": {
+    "prefix": "tableOpt",
+    "body": [
+      "tableOpt () {",
+        "\treturn {",
+          "\t\tcolumn: [",
+            "\t\t\t{",
+              "\t\t\t\tlabel: '${1}',",
+              "\t\t\t\tprop: '',",
+            "\t\t\t},",
+          "\t\t]",
+        "\t}",
+      "}"
+    ],
+    "description": "生成lyTable组件tableOpt属性"
+  },
+  "引入lyTabel公共代码": {
+    "prefix": "import",
+    "body": [
+      "import lyTable from '@/components/mixins/ly-table.js'"
+    ],
+    "description": "引入lyTabel公共代码"
+  },
+  "配置表格列": {
+    "prefix": "column",
+    "body": [
+      "column: [",
+      "\t{",
+        "\t\t",
+      "\t}",
+      "]"
+    ],
+    "description": "配置表格列"
+  },
+  "表头label/搜索label：String": {
+    "prefix": "label",
+    "body": [
+      "label: '${1}'"
+    ],
+    "description": "表头label/搜索label：String"
+  },
+  "列对应字段/搜索字段：String": {
+    "prefix": "prop",
+    "body": [
+      "prop: '${1}'"
+    ],
+    "description": "列对应字段/搜索字段：String"
+  },
+  "是否为搜索栏位：Boolean": {
+    "prefix": "search",
+    "body": [
+      "search: true"
+    ],
+    "description": "是否为搜索栏位：Boolean"
+  },
+  "是否在表格中隐藏此字段：Boolean": {
+    "prefix": "hide",
+    "body": [
+      "hide: true"
+    ],
+    "description": "是否在表格中隐藏此字段：Boolean"
+  },
+  "是否可隐藏此字段：Boolean": {
+    "prefix": "hideable",
+    "body": [
+      "hideable: true"
+    ],
+    "description": "是否可隐藏此字段：Boolean"
+  },
+  "开启搜索栏位插槽，值为插槽name：String": {
+    "prefix": "searchSlot",
+    "body": [
+      "searchSlot: '${1}"
+    ],
+    "description": "开启搜索栏位插槽，值为插槽name：String"
+  },
+  "对搜索栏位排序，值越小越靠前：Number": {
+    "prefix": "sort",
+    "body": [
+      "sort: 1"
+    ],
+    "description": "对搜索栏位排序，值越小越靠前：Number"
+  },
+  "自定义搜索栏位的字段：String": {
+    "prefix": "key",
+    "body": [
+      "key: '${1}'"
+    ],
+    "description": "自定义搜索栏位的字段：String"
+  },
+  "搜索栏位表单类型：input、select、emp、daterange、datetimerange": {
+    "prefix": "type",
+    "body": [
+      "type: 'input'"
+    ],
+    "description": "搜索栏位表单类型：input、select、emp、daterange、datetimerange"
+  },
+  "Picker Options：Object": {
+    "prefix": "pickerOptions",
+    "body": [
+      "pickerOptions: {}"
+    ],
+    "description": "Picker Options：Object"
+  },
+  "表单默认值：Any": {
+    "prefix": "default",
+    "body": [
+      "default: ''"
+    ],
+    "description": "表单默认值：Any"
+  },
+  "表单原生属性placeholder：String": {
+    "prefix": "placeholder",
+    "body": [
+      "placeholder: ''"
+    ],
+    "description": "表单原生属性placeholder：String"
+  },
+  "开启表格列插槽，值为插槽name：String": {
+    "prefix": "slot",
+    "body": [
+      "slot: ''"
+    ],
+    "description": "开启表格列插槽，值为插槽name：String"
+  },
+  "开启表头插槽，值为插槽name：String": {
+    "prefix": "headerSlot",
+    "body": [
+      "headerSlot: ''"
+    ],
+    "description": "开启表头插槽，值为插槽name：String"
+  },
+  "表格列的属性，可以是任何el-table支持的属性：Object": {
+    "prefix": "columnProps",
+    "body": [
+      "columnProps: {}"
+    ],
+    "description": "表格列的属性，可以是任何el-table支持的属性：Object"
+  },
+  "表单的属性，可以是任何表单支持的属性：Object": {
+    "prefix": "formItemProps",
+    "body": [
+      "formItemProps: {}"
+    ],
+    "description": "表单的属性，可以是任何表单支持的属性：Object"
+  },
+  "下拉选项的数据源：数组形式表示手动传入选项；方法形式表示接口形式动态获取选项：Array/Function": {
+    "prefix": "source",
+    "body": [
+      "source: [",
+      "\t{",
+      "\t\t",
+      "\t}",
+      "]"
+    ],
+    "description": "下拉选项的数据源：数组形式表示手动传入选项；方法形式表示接口形式动态获取选项：Array/Function"
+  },
+  "表格列的宽度：Number": {
+    "prefix": "width",
+    "body": [
+      "width: '${1}'"
+    ],
+    "description": "表格列的宽度：Number"
+  },
+  "是否是固定列：Boolean": {
+    "prefix": "fixed",
+    "body": [
+      "fixed: true"
+    ],
+    "description": "是否是固定列：Boolean"
+  },
+  "是否可以排序：Boolean": {
+    "prefix": "sortable",
+    "body": [
+      "sortable: true"
+    ],
+    "description": "是否可以排序：Boolean"
+  },
+  "格式化内容：Function": {
+    "prefix": "formatter",
+    "body": [
+      "formatter(row, column, cellValue, index) {",
+      "\t",
+      "}"
+    ],
+    "description": "格式化内容：Function"
+  },
+  "溢出是否显示tooltip：Boolean": {
+    "prefix": "showOverflowTooltip",
+    "body": [
+      "showOverflowTooltip: true"
+    ],
+    "description": "溢出是否显示tooltip：Boolean"
+  },
+  "自动调用并混入自定义/格式化参数，方法返回一个对象，用于设置自定义或者格式化参数": {
+    "prefix": "formatterParams",
+    "body": [
+      "formatterParams (params) {",
+      "\treturn {",
+        "\t\t...params,",
+        "\t\t${1}",
+      "\t}",
+      "}"
+    ],
+    "description": "自动调用并混入自定义/格式化参数，方法返回一个对象，用于设置自定义或者格式化参数"
+  }
+}

@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="vue.css" />
+    <link rel="stylesheet" href="pure.css" />
+    <link rel="stylesheet" href="buble.css" />
+    <link rel="stylesheet" href="comm.css" />
+    <style>
+      body {
+        overflow-y: scroll !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <article id="main" class="markdown-section">
+      <h1 id="table表格">
+        <a
+          href="/doc/table?id=table%e8%a1%a8%e6%a0%bc"
+          data-id="table表格"
+          class="anchor"
+          ><span>Table表格</span></a
+        >
+      </h1>
+      <p>
+        基于<a
+          href="https://element.eleme.cn/#/zh-CN/component/table"
+          target="_blank"
+          rel="noopener"
+          >el-table</a
+        >
+        <a
+          href="https://element.eleme.cn/#/zh-CN/component/form"
+          target="_blank"
+          rel="noopener"
+          >el-form</a
+        >
+        <a
+          href="https://element.eleme.cn/#/zh-CN/component/pagination"
+          target="_blank"
+          rel="noopener"
+          >el-pagination</a
+        >
+      </p>
+      <p>
+        <a
+          href="https://github.com/861621821/repository/tree/master/table"
+          target="_blank"
+          rel="noopener"
+          >代码地址</a
+        >
+      </p>
+      <h4 id="快速上手">
+        <a
+          href="/doc/table?id=%e5%bf%ab%e9%80%9f%e4%b8%8a%e6%89%8b"
+          data-id="快速上手"
+          class="anchor"
+          ><span>快速上手</span></a
+        >
+      </h4>
+      <p>1.引入ly-table的mixin文件，并混入</p>
+      <pre
+        data-lang="js"
+      ><code class="lang-js"><span class="token keyword">import</span> lyTable <span class="token keyword">from</span> <span class="token string">'@/components/mixins/ly-table.js'</span>
+    <span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
+      mixins<span class="token operator">:</span> <span class="token punctuation">[</span>lyTable<span class="token punctuation">]</span>
+      <span class="token operator">...</span>
+    <span class="token punctuation">}</span></code></pre>
+      <p>2.创建http.js，并配置相关接口地址</p>
+      <pre
+        data-lang="js"
+      ><code class="lang-js"><span class="token keyword">import</span> axios <span class="token keyword">from</span> <span class="token string">'@/common/ajax.js'</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span> stringify <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'qs'</span><span class="token punctuation">)</span>
+    <span class="token keyword">export</span> <span class="token keyword">const</span> recordsApi <span class="token operator">=</span> <span class="token punctuation">{</span>
+      <span class="token function-variable function">reqQuery</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter">params</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> axios<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/wecom/robot/login/history?</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token function">stringify</span><span class="token punctuation">(</span>params<span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token comment">// 查询表格数据的接口</span>
+      <span class="token function-variable function">getOption</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter">params</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> axios<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/wecom/api/test?</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token function">stringify</span><span class="token punctuation">(</span>params<span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span> <span class="token comment">// 查询搜索框下拉选项的接口</span>
+    <span class="token punctuation">}</span></code></pre>
+      <p class="tip">注意：reqQuery、reqDelete不可更改</p>
+      <p>3.引入http.js，并在data中定义状态：COMM_HTTP</p>
+      <pre
+        data-lang="js"
+      ><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> recordsApi <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./http.js'</span>
+    <span class="token operator">...</span>
+    <span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
+      <span class="token function">data</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token punctuation">{</span>
+          <span class="token constant">COMM_HTTP</span><span class="token operator">:</span> recordsApi<span class="token punctuation">,</span> <span class="token comment">// 表格内所有接口配置,必要值</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span></code></pre>
+      <h4 id="attributes">
+        <a href="/doc/table?id=attributes" data-id="attributes" class="anchor"
+          ><span>Attributes</span></a
+        >
+      </h4>
+      <table>
+        <thead>
+          <tr>
+            <th>属性</th>
+            <th>类型</th>
+            <th>说明</th>
+            <th>默认值</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>data</td>
+            <td>Array</td>
+            <td>表格数据</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>option</td>
+            <td>Object</td>
+            <td>表格配置<a href="/doc/table?id=option">option</a></td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>table-loading</td>
+            <td>Boolean</td>
+            <td>loading效果</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>page</td>
+            <td>Number</td>
+            <td>当前页码</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>pageSize</td>
+            <td>Number</td>
+            <td>分页尺寸</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>total</td>
+            <td>Number</td>
+            <td>数据总条数</td>
+            <td>-</td>
+          </tr>
+        </tbody>
+      </table>
+      <h4 id="events">
+        <a href="/doc/table?id=events" data-id="events" class="anchor"
+          ><span>Events</span></a
+        >
+      </h4>
+      <table>
+        <thead>
+          <tr>
+            <th>事件名</th>
+            <th>说明</th>
+            <th>参数</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>events</td>
+            <td>监听内置操作列方法的事件</td>
+            <td><code>event</code></td>
+          </tr>
+          <tr>
+            <td>searchChange</td>
+            <td>过滤条件改变时触发的事件</td>
+            <td><code>params</code></td>
+          </tr>
+          <tr>
+            <td>sizeChange</td>
+            <td>分页尺寸改变时触发的事件</td>
+            <td><code>size</code></td>
+          </tr>
+          <tr>
+            <td>currentChange</td>
+            <td>当前页面改变时触发的事件</td>
+            <td><code>page</code></td>
+          </tr>
+          <tr>
+            <td>selectionChange</td>
+            <td>当选择项发生变化时会触发该事件</td>
+            <td><code>selection</code></td>
+          </tr>
+          <tr>
+            <td>sortChange</td>
+            <td>当表格的排序条件发生变化的时候会触发该事件</td>
+            <td><code>{column, prop, order}</code></td>
+          </tr>
+        </tbody>
+      </table>
+      <h4 id="option">
+        <a href="/doc/table?id=option" data-id="option" class="anchor"
+          ><span>option</span></a
+        >
+      </h4>
+      <table>
+        <thead>
+          <tr>
+            <th>配置项</th>
+            <th>类型</th>
+            <th>说明</th>
+            <th>默认值</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>tableKey</td>
+            <td>String</td>
+            <td>表格的key</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>tableProps</td>
+            <td>Object</td>
+            <td>el-table的属性</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>labelWidth</td>
+            <td>String</td>
+            <td>搜索表单的label宽度</td>
+            <td>70px</td>
+          </tr>
+          <tr>
+            <td>setting</td>
+            <td>Boolean</td>
+            <td>是否可对表格设置</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>showSelection</td>
+            <td>Boolean</td>
+            <td>是否显示选择列</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>showIndex</td>
+            <td>Boolean</td>
+            <td>是否显示序号</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>operation</td>
+            <td>String/Array</td>
+            <td>
+              操作列设置，详情请查看<a
+                href="/doc/table?id=%e6%93%8d%e4%bd%9c%e5%88%97%e8%ae%be%e7%bd%ae"
+                >操作列设置</a
+              >
+            </td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>operationWidth</td>
+            <td>String</td>
+            <td>操作列的宽度</td>
+            <td>自适应</td>
+          </tr>
+          <tr>
+            <td>levitate</td>
+            <td>Boolean</td>
+            <td>是否开启悬浮分页，一个页面多个表格组件开启悬浮，会出现异常</td>
+            <td>true</td>
+          </tr>
+          <tr>
+            <td>scrollEl</td>
+            <td>String</td>
+            <td>
+              监听滚动元素的选择器，详情参考<a href="/doc/table?id=scrollel"
+                >scrollEl</a
+              >说明
+            </td>
+            <td>默认为表格组件的父元素</td>
+          </tr>
+          <tr>
+            <td>column</td>
+            <td>Array</td>
+            <td>列数据，详情请查看<a href="/doc/table?id=column">column</a></td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>layout</td>
+            <td>String</td>
+            <td>
+              分页组件功能，同<a
+                href="https://element.eleme.cn/#/zh-CN/component/pagination"
+                target="_blank"
+                rel="noopener"
+                >el-pagination</a
+              >，为<code>hide</code>时隐藏
+            </td>
+            <td>完整分页</td>
+          </tr>
+        </tbody>
+      </table>
+      <h4 id="column">
+        <a href="/doc/table?id=column" data-id="column" class="anchor"
+          ><span>column</span></a
+        >
+      </h4>
+      <table>
+        <thead>
+          <tr>
+            <th>配置项</th>
+            <th>类型</th>
+            <th>说明</th>
+            <th>默认值</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>label</td>
+            <td>String</td>
+            <td>表格头以及搜索表单的label</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>prop</td>
+            <td>String</td>
+            <td>字段</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>hide</td>
+            <td>Boolean</td>
+            <td>是否在表格中隐藏此字段</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>hideable</td>
+            <td>Boolean</td>
+            <td>是否可隐藏此字段</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>search</td>
+            <td>Boolean</td>
+            <td>是否是搜索栏位</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>searchSlot</td>
+            <td>String</td>
+            <td>开启搜索栏位插槽，值为插槽name</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>sort</td>
+            <td>Number</td>
+            <td>对搜索栏位排序</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>key</td>
+            <td>String/Array</td>
+            <td>自定义搜索条件的key</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>type</td>
+            <td>String</td>
+            <td>
+              表单类型：<code>input</code>、<code>select</code>、<code>emp</code>、<code>daterange</code>、<code
+                >datetimerange</code
+              >
+            </td>
+            <td>input</td>
+          </tr>
+          <tr>
+            <td>pickerOptions</td>
+            <td>Object</td>
+            <td>同el-date-picker的Picker Options</td>
+            <td>
+              默认不能选择当前时间之后的时间，如不需要限制，传入一个空对象即可
+            </td>
+          </tr>
+          <tr>
+            <td>default</td>
+            <td>String</td>
+            <td>表单默认值</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>placeholder</td>
+            <td>String</td>
+            <td>表单原生属性placeholder</td>
+            <td>请输入/请选择</td>
+          </tr>
+          <tr>
+            <td>slot</td>
+            <td>String</td>
+            <td>开启插槽，值为插槽name</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>headerSlot</td>
+            <td>String</td>
+            <td>开启表头插槽，值为插槽name</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>columnProps</td>
+            <td>Object</td>
+            <td>表格列的属性，可以是任何el-table支持的属性</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>formItemProps</td>
+            <td>Object</td>
+            <td>表单的属性，可以是任何表单支持的属性</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>source</td>
+            <td>Array/Function</td>
+            <td>
+              下拉选项的数据源：数组形式表示手动传入选项；方法形式表示接口形式动态获取选项
+            </td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>sourceField</td>
+            <td>Object</td>
+            <td>
+              修正选项的key，例如： <code>{label: 'name',value: 'id'}</code>
+            </td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>width</td>
+            <td>String</td>
+            <td>列的宽度</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>fixed</td>
+            <td>Boolean</td>
+            <td>是否是固定列，同el-table</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>sortable</td>
+            <td>Boolean</td>
+            <td>是否可以排序，同el-table</td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>formatter</td>
+            <td>Function</td>
+            <td>格式化内容，同el-table</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>showOverflowTooltip</td>
+            <td>Boolean</td>
+            <td>溢出是否显示tooltip</td>
+            <td>false</td>
+          </tr>
+        </tbody>
+      </table>
+      <h4 id="其他">
+        <a href="/doc/table?id=%e5%85%b6%e4%bb%96" data-id="其他" class="anchor"
+          ><span>其他</span></a
+        >
+      </h4>
+      <ul>
+        <li>
+          状态：DATA_LOCATION
+          <blockquote>
+            <p>
+              <code>DATA_LOCATION: 'xxx'</code>
+              修正接口中表格数据所在的位置，数据在list或者data下时不需要设置。比如下面这种情况就需要配置<code
+                >DATA_LOCATION: 'test'</code
+              >
+            </p>
+          </blockquote>
+          <pre
+            data-lang="js"
+          ><code class="lang-js"><span class="token punctuation">{</span>
+      <span class="token string">"code"</span><span class="token operator">:</span><span class="token number">200</span><span class="token punctuation">,</span>
+      <span class="token string">"data"</span><span class="token operator">:</span><span class="token punctuation">{</span>
+        <span class="token string">"total"</span><span class="token operator">:</span><span class="token number">106</span><span class="token punctuation">,</span>
+        <span class="token string">"test"</span><span class="token operator">:</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token comment">// 这里的key为test</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span></code></pre>
+        </li>
+        <li>
+          状态：IMMEDIATE
+          <blockquote>
+            <p>
+              是否立即请求数据，默认为true。例如在dialog中使用ly-table组件时，在打开dialog前就会请求数据，如果想要在dialog打开的时候请求数据那么就配置状态<code
+                >IMMEDIATE: false</code
+              >
+            </p>
+          </blockquote>
+        </li>
+        <li>
+          状态：FIELD
+          <blockquote>
+            <p>
+              修正内置删除、更新、修改操作的id字段，默认以<code>id</code>为key执行内置删除、更新、修改操作。比如在某个表格内使用内置删除功能，删除接口接收userId参数，那么就配置<code
+                >FIELD: userId</code
+              >，这时候传给后台的参数就是<code>userId: xxx</code>
+            </p>
+          </blockquote>
+        </li>
+        <li>
+          方法：formatterParams
+          <blockquote>
+            <p>
+              定义formatterParams
+              方法，方法接收params参数，组件将自动调用并混入自定义/格式化参数，方法的返回值为对象，用于设置自定义或者格式化参数。
+            </p>
+          </blockquote>
+          <pre
+            data-lang="js"
+          ><code class="lang-js"><span class="token function">formatterParams</span> <span class="token punctuation">(</span><span class="token parameter">params</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token punctuation">{</span>
+        <span class="token operator">...</span>params<span class="token punctuation">,</span>
+        begin_at<span class="token operator">:</span> params<span class="token punctuation">.</span>begin_at <span class="token operator">/</span> <span class="token number">1000</span><span class="token punctuation">,</span>
+        end_at<span class="token operator">:</span> params<span class="token punctuation">.</span>end_at <span class="token operator">/</span> <span class="token number">1000</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span></code></pre>
+        </li>
+      </ul>
+      <h4 id="插槽">
+        <a href="/doc/table?id=%e6%8f%92%e6%a7%bd" data-id="插槽" class="anchor"
+          ><span>插槽</span></a
+        >
+      </h4>
+      <ul>
+        <li>handler 功能区左侧插槽</li>
+        <li>handlerright 功能区右侧插槽</li>
+        <li>
+          operation 操作列插槽
+          <pre
+            data-lang="html"
+          ><code class="lang-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span> <span class="token attr-name">#handler</span><span class="token punctuation">&gt;</span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">&gt;</span></span>共 1 个客户<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">&gt;</span></span></code></pre>
+        </li>
+      </ul>
+      <h4 id="scrollel">
+        <a href="/doc/table?id=scrollel" data-id="scrollel" class="anchor"
+          ><span>scrollEl</span></a
+        >
+      </h4>
+      <blockquote>
+        <p>
+          默认情况下，表格的悬浮分页功能是通过监听表格组件的父元素：<code>document.querySelector('.xl-ly-table').parentNode</code>实现的。在实际开发过程中，有可能出现需要重新布局导致实际滚动的元素不是
+          <code>document.querySelector('.xl-ly-table').parentNode</code
+          >，所以就需要指定<code>scrollEl</code>。例如：<code
+            >scrollEl: '.page-warp-bg'</code
+          >
+        </p>
+      </blockquote>
+      <h4 id="操作列设置">
+        <a
+          href="/doc/table?id=%e6%93%8d%e4%bd%9c%e5%88%97%e8%ae%be%e7%bd%ae"
+          data-id="操作列设置"
+          class="anchor"
+          ><span>操作列设置</span></a
+        >
+      </h4>
+      <ul>
+        <li>
+          隐藏操作列
+          <pre
+            data-lang="js"
+          ><code class="lang-js">operation<span class="token operator">:</span> <span class="token string">'hide'</span></code></pre>
+        </li>
+        <li>
+          使用内置按钮：<code>delete</code>,<code>detail</code>,
+          <code>edit</code>
+          <pre
+            data-lang="js"
+          ><code class="lang-js">operation<span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">'delete'</span>
+    <span class="token punctuation">]</span></code></pre>
+        </li>
+        <li>
+          自定义按钮
+          <pre
+            data-lang="js"
+          ><code class="lang-js">operation<span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        label<span class="token operator">:</span> <span class="token string">'自定义按钮'</span><span class="token punctuation">,</span> 
+        <span class="token function">handler</span><span class="token punctuation">(</span><span class="token parameter">row</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+          <span class="token comment">//自定义回调</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span></code></pre>
+        </li>
+      </ul>
+      <h4 id="基础用法">
+        <a
+          href="/doc/table?id=%e5%9f%ba%e7%a1%80%e7%94%a8%e6%b3%95"
+          data-id="基础用法"
+          class="anchor"
+          ><span>基础用法</span></a
+        >
+      </h4>
+      <pre
+        data-lang="html"
+      ><code class="lang-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">&gt;</span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>records-warp<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ly-table</span>
+          <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>lyTable<span class="token punctuation">"</span></span>
+          <span class="token attr-name">:data</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tableData<span class="token punctuation">"</span></span>
+          <span class="token attr-name">:option</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tableOpt<span class="token punctuation">"</span></span>
+          <span class="token attr-name">:table-loading</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>loading<span class="token punctuation">"</span></span>
+          <span class="token attr-name">:page</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>page<span class="token punctuation">"</span></span>
+          <span class="token attr-name">:pageSize</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>per_page<span class="token punctuation">"</span></span>
+          <span class="token attr-name">:total</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>total<span class="token punctuation">"</span></span>
+          <span class="token attr-name">@searchChange</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>searchChange<span class="token punctuation">"</span></span>
+          <span class="token attr-name">@sizeChange</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>handleSizeChange<span class="token punctuation">"</span></span>
+          <span class="token attr-name">@currentChange</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>handleCurrentChange<span class="token punctuation">"</span></span>
+          <span class="token attr-name">@selectionChange</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>handleSelectionChange<span class="token punctuation">"</span></span>
+        <span class="token punctuation">&gt;</span></span>
+          <span class="token comment">&lt;!-- 搜索插槽 --&gt;</span>
+          <span class="token comment">&lt;!-- 功能区插槽 --&gt;</span>
+          <span class="token comment">&lt;!-- 列插槽 --&gt;</span>
+          <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span> <span class="token attr-name">#user_name_slot</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>{row}<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span> <span class="token attr-name">v-if</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>row.WecomUserID != 0<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+              <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>img</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>avatar<span class="token punctuation">"</span></span> <span class="token attr-name">:src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>row.user_avatar<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+              <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">margin-left</span><span class="token punctuation">:</span> 10px</span><span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>{{ row.user_name }}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span> <span class="token attr-name">v-else</span><span class="token punctuation">&gt;</span></span>
+              <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>other-icon<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>外<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span>
+              <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>other-name<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>非本企业账号<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">&gt;</span></span>
+          <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ly-table</span><span class="token punctuation">&gt;</span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">&gt;</span></span><span class="token script"><span class="token language-javascript">
+    <span class="token keyword">import</span> lyTable <span class="token keyword">from</span> <span class="token string">'@/components/mixins/ly-table.js'</span> <span class="token comment">// 引入组件公共方法</span>
+    <span class="token keyword">import</span> <span class="token punctuation">{</span> recordsApi <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./http.js'</span> <span class="token comment">// 定义http.js 用来管理组件需要用到的接口</span>
+    <span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
+      mixins<span class="token operator">:</span> <span class="token punctuation">[</span>lyTable<span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token function">data</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token punctuation">{</span>
+          <span class="token constant">COMM_HTTP</span><span class="token operator">:</span> recordsApi<span class="token punctuation">,</span> <span class="token comment">// 表格内所有接口配置</span>
+          <span class="token constant">DATA_LOCATION</span><span class="token operator">:</span> <span class="token string">'list'</span> <span class="token comment">// 接口中表格数据所在的位置 默认为list</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      computed<span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token function">tableOpt</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          <span class="token keyword">return</span> <span class="token punctuation">{</span>
+            showSelection<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token comment">// 是否显示选择框 默认隐藏</span>
+            showIndex<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token comment">// 是否显示序号 默认隐藏</span>
+            operation<span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token comment">// 是否显示操作栏 为空或者不传时隐藏  内置：'detail', 'edit', 'delete'</span>
+              <span class="token string">'detail'</span><span class="token punctuation">,</span>
+              <span class="token punctuation">{</span>
+                label<span class="token operator">:</span> <span class="token string">'下线'</span><span class="token punctuation">,</span>
+                <span class="token function">handler</span> <span class="token punctuation">(</span><span class="token parameter">row</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>row<span class="token punctuation">)</span> <span class="token punctuation">}</span> <span class="token comment">// 自定义按钮的回调</span>
+              <span class="token punctuation">}</span>
+            <span class="token punctuation">]</span><span class="token punctuation">,</span>
+            operationWidth<span class="token operator">:</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token comment">// 操作栏宽度</span>
+            <span class="token comment">// layout: 'prev, pager, next', // 自定义分页组件的功能</span>
+            column<span class="token operator">:</span> <span class="token punctuation">[</span>
+              <span class="token punctuation">{</span>
+                label<span class="token operator">:</span> <span class="token string">'登录账号'</span><span class="token punctuation">,</span>
+                prop<span class="token operator">:</span> <span class="token string">'user_name'</span><span class="token punctuation">,</span>
+                search<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token comment">// 将该字段设为搜索项</span>
+                placeholder<span class="token operator">:</span> <span class="token string">'请输入账号名称'</span><span class="token punctuation">,</span>
+                slot<span class="token operator">:</span> <span class="token string">'user_name_slot'</span> <span class="token comment">// 使用插槽，自定义显示格式</span>
+              <span class="token punctuation">}</span><span class="token punctuation">,</span>
+              <span class="token punctuation">{</span>
+                label<span class="token operator">:</span> <span class="token string">'登录时间'</span><span class="token punctuation">,</span>
+                prop<span class="token operator">:</span> <span class="token string">'login_at'</span><span class="token punctuation">,</span>
+                search<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+                type<span class="token operator">:</span> <span class="token string">'datetimerange'</span><span class="token punctuation">,</span> <span class="token comment">// 设置搜索类型为日期时间选择器</span>
+                key<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'begin_at'</span><span class="token punctuation">,</span> <span class="token string">'end_at'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment">// 自定义搜索条件的key</span>
+                formItemProps<span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token comment">// 其他表单属性</span>
+                  style<span class="token operator">:</span> <span class="token string">'width: 360px'</span><span class="token punctuation">,</span>
+                  <span class="token string">'default-time'</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'00:00:00'</span><span class="token punctuation">,</span> <span class="token string">'23:59:59'</span><span class="token punctuation">]</span>
+                <span class="token punctuation">}</span><span class="token punctuation">,</span>
+                <span class="token function-variable function">formatter</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter">row<span class="token punctuation">,</span> column<span class="token punctuation">,</span> cellValue<span class="token punctuation">,</span> index</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span> <span class="token comment">// 格式化单元格</span>
+                  <span class="token keyword">return</span> row<span class="token punctuation">.</span>login_at <span class="token operator">===</span> <span class="token number">0</span> <span class="token operator">?</span> <span class="token string">'-'</span> <span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>util<span class="token punctuation">.</span><span class="token function">timeTofmt</span><span class="token punctuation">(</span>cellValue<span class="token punctuation">,</span> <span class="token string">'yyyy-MM-dd hh:mm'</span><span class="token punctuation">)</span>
+                <span class="token punctuation">}</span>
+              <span class="token punctuation">}</span><span class="token punctuation">,</span>
+              <span class="token punctuation">{</span>
+                label<span class="token operator">:</span> <span class="token string">'下线时间'</span><span class="token punctuation">,</span>
+                prop<span class="token operator">:</span> <span class="token string">'login_out_at'</span><span class="token punctuation">,</span>
+                <span class="token function-variable function">formatter</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter">row<span class="token punctuation">,</span> column<span class="token punctuation">,</span> cellValue<span class="token punctuation">,</span> index</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+                  <span class="token keyword">return</span> row<span class="token punctuation">.</span>login_out_at <span class="token operator">===</span> <span class="token number">0</span> <span class="token operator">?</span> <span class="token string">'-'</span> <span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>util<span class="token punctuation">.</span><span class="token function">timeTofmt</span><span class="token punctuation">(</span>cellValue<span class="token punctuation">,</span> <span class="token string">'yyyy-MM-dd hh:mm'</span><span class="token punctuation">)</span>
+                <span class="token punctuation">}</span>
+              <span class="token punctuation">}</span><span class="token punctuation">,</span>
+              <span class="token punctuation">{</span>
+                label<span class="token operator">:</span> <span class="token string">'扣除云豆'</span><span class="token punctuation">,</span>
+                prop<span class="token operator">:</span> <span class="token string">'bean'</span><span class="token punctuation">,</span>
+                columnProps<span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token comment">// 其他列属性</span>
+                  <span class="token string">'class-name'</span><span class="token operator">:</span> <span class="token string">'cost'</span>
+                <span class="token punctuation">}</span>
+              <span class="token punctuation">}</span>
+            <span class="token punctuation">]</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    </span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span></code></pre>
+    </article>
+  </body>
+</html>
