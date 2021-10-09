@@ -2,7 +2,7 @@
 	"name": "ly-table-plugin",
 	"displayName": "ly-table-plugin",
 	"description": "内部crud组件插件",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"publisher": "xilan",
 	"icon": "logo.jpg",
 	"engines": {
